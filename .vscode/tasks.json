@@ -1,0 +1,59 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compile Project",
+            "type": "process",
+            "isBuildCommand": true,
+            "command": "ninja",
+            "args": [
+                "-C",
+                "${workspaceFolder}/build"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": "$gcc",
+            "windows": {
+                "command": "ninja.exe"
+            }
+        },
+        {
+            "label": "Flash",
+            "type": "process",
+            "command": "teensy_loader_cli",
+            "args": [
+                "-mmcu=imxrt1062",
+                "-w",
+                "-v",
+                "${command:cmake.launchTargetPath}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": [],
+            "windows": {
+                "command": "teensy_loader_cli.exe"
+            }
+        },
+        {
+            "label": "Reboot",
+            "type": "process",
+            "command": "teensy_loader_cli",
+            "args": [
+                "-mmcu=imxrt1062",
+                "--reboot"
+            ],
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": [],
+            "windows": {
+                "command": "teensy_loader_cli.exe"
+            }
+        }
+    ]
+}

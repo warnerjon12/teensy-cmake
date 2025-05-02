@@ -1,0 +1,18 @@
+[
+    {
+        "name": "Teensy 4.0",
+        "compilers": {
+            "C": "/usr/bin/arm-none-eabi-gcc",
+            "CXX": "/usr/bin/arm-none-eabi-g++"
+        },
+        "toolchainFile": "${workspaceFolder}/cmake/teensy-arm.toolchain.cmake",
+        "environmentVariables": {
+            "PATH": "${env:PATH}"
+        },
+        "cmakeSettings": {
+            "TEENSY_BOARD": "teensy40",
+            "TEENSY_CORES_ROOT": "${workspaceFolder}/lib/teensy/cores"
+        },
+        "preferredGenerator": "Ninja"
+    }
+]
