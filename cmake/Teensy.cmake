@@ -101,7 +101,6 @@ if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
         ${TEENSY_ROOT}/usb_flightsim.cpp
         ${TEENSY_ROOT}/IPAddress.cpp
         ${TEENSY_ROOT}/Stream.cpp
-        ${TEENSY_ROOT}/Time.cpp
         ${TEENSY_ROOT}/Tone.cpp
         ${TEENSY_ROOT}/IntervalTimer.cpp
         ${TEENSY_ROOT}/DMAChannel.cpp
