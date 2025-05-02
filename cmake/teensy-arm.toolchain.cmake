@@ -22,9 +22,15 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 set(TRIPLE "arm-none-eabi")
-set(TOOLCHAIN_ROOT "/usr")
-set(TEENSY_BOARD "teensy31")
-set(TEENSY_CORES_ROOT "/usr/share/arduino/hardware/teensy/cores" CACHE PATH "Path to the Teensy 'cores' repository")
+if(NOT DEFINED TOOLCHAIN_ROOT)
+    set(TOOLCHAIN_ROOT "/usr")
+endif()
+if(NOT DEFINED TEENSY_BOARD)
+    set(TEENSY_BOARD "teensy31")
+endif()
+if(NOT DEFINED TEENSY_CORES_ROOT)
+    set(TEENSY_CORES_ROOT "/usr/share/arduino/hardware/teensy/cores" CACHE PATH "Path to the Teensy 'cores' repository")
+endif()
 
 if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
     set(TEENSY_ROOT "${TEENSY_CORES_ROOT}/teensy4")
@@ -32,22 +38,34 @@ else()
     set(TEENSY_ROOT "${TEENSY_CORES_ROOT}/teensy3")
 endif()
 
-set(ARDUINO_LIB_ROOT "/usr/share/arduino/libraries" CACHE PATH "Path to the Arduino library directory")
-set(ARDUINO_VERSION "106" CACHE STRING "Version of the Arduino SDK")
-set(TEENSYDUINO_VERSION "120" CACHE STRING "Version of the Teensyduino SDK")
+if(NOT DEFINED ARDUINO_LIB_ROOT)
+    set(ARDUINO_LIB_ROOT "/usr/share/arduino/libraries" CACHE PATH "Path to the Arduino library directory")
+endif()
+if(NOT DEFINED ARDUINO_VERSION)
+    set(ARDUINO_VERSION "106" CACHE STRING "Version of the Arduino SDK")
+endif()
+if(NOT DEFINED TEENSYDUINO_VERSION)
+    set(TEENSYDUINO_VERSION "120" CACHE STRING "Version of the Teensyduino SDK")
+endif()
 
 if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
     set(TEENSY_MODEL "IMXRT1062")
-    set(TEENSY_FREQUENCY "600" CACHE STRING "Frequency of the Teensy MCU (MHz)")
+    if(NOT DEFINED TEENSY_FREQUENCY)
+        set(TEENSY_FREQUENCY "600" CACHE STRING "Frequency of the Teensy MCU (MHz)")
+    endif()
 else()
     # set(TEENSY_MODEL "MK20DX256" CACHE STRING "Model of the Teensy MCU")
     set(TEENSY_MODEL "MK20DX256") # XXX Add Teensy 3.0 support.
-    set(TEENSY_FREQUENCY "96" CACHE STRING "Frequency of the Teensy MCU (Mhz)")
+    if(NOT DEFINED TEENSY_FREQUENCY)
+        set(TEENSY_FREQUENCY "96" CACHE STRING "Frequency of the Teensy MCU (MHz)")
+    endif()
 endif()
 
 set_property(CACHE TEENSY_FREQUENCY PROPERTY STRINGS 1008 960 912 816 720 600 528 450 396 150 96 72 48 24 16 8 4 2)
 
-set(TEENSY_USB_MODE "SERIAL" CACHE STRING "What kind of USB device the Teensy should emulate")
+if(NOT DEFINED TEENSY_USB_MODE)
+    set(TEENSY_USB_MODE "SERIAL" CACHE STRING "What kind of USB device the Teensy should emulate")
+endif()
 set_property(CACHE TEENSY_USB_MODE PROPERTY STRINGS
              SERIAL DUAL_SERIAL TRIPLE_SERIAL
              KEYBOARD TOUCHSCREEN
