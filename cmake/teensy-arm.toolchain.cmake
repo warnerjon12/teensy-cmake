@@ -21,6 +21,8 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+option(FSP_MATH "Link the Cortex-M7 FSP math library")
+
 set(TRIPLE "arm-none-eabi")
 if(NOT DEFINED TOOLCHAIN_ROOT)
     set(TOOLCHAIN_ROOT "/usr")
@@ -112,7 +114,11 @@ if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
         add_definitions(-DARDUINO_TEENSY40)
     endif()
 
-    set(LINKER_LIBS "-larm_cortexM7lfsp_math -lm -lstdc++" )
+    if(FSP_MATH)
+        set(LINKER_LIBS "-larm_cortexM7lfsp_math -lm -lstdc++" )
+    else()
+        set(LINKER_LIBS "-lm -lstdc++" )
+    endif()
 else()
     set(TARGET_FLAGS "-mcpu=cortex-m4 -mthumb")
     set(BASE_FLAGS "-Os -Wall -nostdlib -ffunction-sections -fdata-sections ${TARGET_FLAGS}")
