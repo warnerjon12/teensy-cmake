@@ -23,19 +23,40 @@
 
 set(TRIPLE "arm-none-eabi")
 set(TOOLCHAIN_ROOT "/usr")
+set(TEENSY_BOARD "teensy31")
 set(TEENSY_CORES_ROOT "/usr/share/arduino/hardware/teensy/cores" CACHE PATH "Path to the Teensy 'cores' repository")
-set(TEENSY_ROOT "${TEENSY_CORES_ROOT}/teensy3")
+
+if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
+    set(TEENSY_ROOT "${TEENSY_CORES_ROOT}/teensy4")
+else()
+    set(TEENSY_ROOT "${TEENSY_CORES_ROOT}/teensy3")
+endif()
+
 set(ARDUINO_LIB_ROOT "/usr/share/arduino/libraries" CACHE PATH "Path to the Arduino library directory")
 set(ARDUINO_VERSION "106" CACHE STRING "Version of the Arduino SDK")
 set(TEENSYDUINO_VERSION "120" CACHE STRING "Version of the Teensyduino SDK")
-#set(TEENSY_MODEL "MK20DX256" CACHE STRING "Model of the Teensy MCU")
-set(TEENSY_MODEL "MK20DX256") # XXX Add Teensy 3.0 support.
 
-set(TEENSY_FREQUENCY "96" CACHE STRING "Frequency of the Teensy MCU (Mhz)")
-set_property(CACHE TEENSY_FREQUENCY PROPERTY STRINGS 96 72 48 24 16 8 4 2)
+if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
+    set(TEENSY_MODEL "IMXRT1062")
+    set(TEENSY_FREQUENCY "600" CACHE STRING "Frequency of the Teensy MCU (MHz)")
+else()
+    # set(TEENSY_MODEL "MK20DX256" CACHE STRING "Model of the Teensy MCU")
+    set(TEENSY_MODEL "MK20DX256") # XXX Add Teensy 3.0 support.
+    set(TEENSY_FREQUENCY "96" CACHE STRING "Frequency of the Teensy MCU (Mhz)")
+endif()
+
+set_property(CACHE TEENSY_FREQUENCY PROPERTY STRINGS 1008 960 912 816 720 600 528 450 396 150 96 72 48 24 16 8 4 2)
 
 set(TEENSY_USB_MODE "SERIAL" CACHE STRING "What kind of USB device the Teensy should emulate")
-set_property(CACHE TEENSY_USB_MODE PROPERTY STRINGS SERIAL HID SERIAL_HID MIDI RAWHID FLIGHTSIM)
+set_property(CACHE TEENSY_USB_MODE PROPERTY STRINGS
+             SERIAL DUAL_SERIAL TRIPLE_SERIAL
+             KEYBOARD TOUCHSCREEN
+             HID SERIAL_HID HID_TOUCH
+             MIDI MIDI4 MIDI16
+             MIDI_SERIAL MIDI4_SERIAL MIDI16_SERIAL
+             AUDIO MIDI_AUDIO_SERIAL MIDI16_AUDIO_SERIAL
+             MTPDISK MTPDISK_SERIAL
+             RAWHID FLIGHTSIM FLIGHTSIM_JOYSTICK)
 
 if(WIN32)
     set(TOOL_OS_SUFFIX .exe)
@@ -59,14 +80,32 @@ set(CMAKE_RANLIB "${TOOLCHAIN_ROOT}/bin/${TRIPLE}-ranlib${TOOL_OS_SUFFIX}" CACHE
 
 include_directories("${TEENSY_ROOT}")
 
-set(TARGET_FLAGS "-mcpu=cortex-m4 -mthumb")
-set(BASE_FLAGS "-Os -Wall -nostdlib -ffunction-sections -fdata-sections ${TARGET_FLAGS}")
+if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
+    set(TARGET_FLAGS "-mthumb -mcpu=cortex-m7 -mfloat-abi=hard -mfpu=fpv5-d16")
+    set(BASE_FLAGS "-g -Wall -ffunction-sections -fdata-sections -nostdlib ${TARGET_FLAGS}")
+
+    set(CMAKE_CXX_FLAGS "${BASE_FLAGS} -fno-exceptions -fpermissive -fno-rtti -fno-threadsafe-statics -felide-constructors -std=gnu++0x -Wno-error=narrowing" CACHE STRING "c++ flags")
+
+    if(TEENSY_BOARD STREQUAL "teensy41")
+        set(TEENSY_LD "imxrt1062_t41.ld")
+    else()
+        set(TEENSY_LD "imxrt1062.ld")
+    endif()
+
+    set(LINKER_LIBS "-larm_cortexM7lfsp_math -lm -lstdc++" )
+else()
+    set(TARGET_FLAGS "-mcpu=cortex-m4 -mthumb")
+    set(BASE_FLAGS "-Os -Wall -nostdlib -ffunction-sections -fdata-sections ${TARGET_FLAGS}")
+
+    set(CMAKE_CXX_FLAGS "${BASE_FLAGS} -fno-exceptions -fno-rtti -felide-constructors -std=gnu++0x" CACHE STRING "c++ flags")
+
+    set(TEENSY_LD "mk20dx256.ld" )
+    set(LINKER_LIBS "-larm_cortexM4l_math -lm" )
+endif()
 
 set(CMAKE_C_FLAGS "${BASE_FLAGS} -DTIME_T=1421620748" CACHE STRING "c flags") # XXX Generate TIME_T dynamically.
-set(CMAKE_CXX_FLAGS "${BASE_FLAGS} -fno-exceptions -fno-rtti -felide-constructors -std=gnu++0x" CACHE STRING "c++ flags")
+set(LINKER_FLAGS "-Os -Wl,--gc-sections,--relax ${TARGET_FLAGS} -T${TEENSY_ROOT}/${TEENSY_LD}" )
 
-set(LINKER_FLAGS "-Os -Wl,--gc-sections ${TARGET_FLAGS} -T${TEENSY_ROOT}/mk20dx256.ld" )
-set(LINKER_LIBS "-larm_cortexM4l_math -lm" )
 set(CMAKE_SHARED_LINKER_FLAGS "${LINKER_FLAGS}" CACHE STRING "linker flags" FORCE)
 set(CMAKE_MODULE_LINKER_FLAGS "${LINKER_FLAGS}" CACHE STRING "linker flags" FORCE)
 set(CMAKE_EXE_LINKER_FLAGS "${LINKER_FLAGS}" CACHE STRING "linker flags" FORCE)

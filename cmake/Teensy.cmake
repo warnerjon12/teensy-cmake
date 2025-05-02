@@ -23,67 +23,188 @@
 
 set(TY_EXECUTABLE "/usr/bin/tyc" CACHE FILEPATH "Path to the 'ty' executable that can upload programs to the Teensy")
 
-set(TEENSY_C_CORE_FILES
-    ${TEENSY_ROOT}/math_helper.c
-    ${TEENSY_ROOT}/analog.c
-    ${TEENSY_ROOT}/serial1.c
-    ${TEENSY_ROOT}/serial2.c
-    ${TEENSY_ROOT}/serial3.c
-    ${TEENSY_ROOT}/usb_mem.c
-    ${TEENSY_ROOT}/usb_dev.c
-    ${TEENSY_ROOT}/usb_midi.c
-    ${TEENSY_ROOT}/usb_mouse.c 
-    ${TEENSY_ROOT}/usb_desc.c
-    ${TEENSY_ROOT}/usb_keyboard.c
-    ${TEENSY_ROOT}/usb_joystick.c
-    ${TEENSY_ROOT}/usb_rawhid.c
-    ${TEENSY_ROOT}/usb_seremu.c
-    ${TEENSY_ROOT}/usb_serial.c
-    ${TEENSY_ROOT}/mk20dx128.c
-    ${TEENSY_ROOT}/touch.c
-    ${TEENSY_ROOT}/pins_teensy.c
-    ${TEENSY_ROOT}/keylayouts.c
-    ${TEENSY_ROOT}/nonstd.c
-    ${TEENSY_ROOT}/eeprom.c
-)
+if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
+    set(TEENSY_C_CORE_FILES
+        ${TEENSY_ROOT}/debugprintf.c
+        ${TEENSY_ROOT}/analog.c
+        ${TEENSY_ROOT}/delay.c
+        ${TEENSY_ROOT}/digital.c
+        ${TEENSY_ROOT}/interrupt.c
+        ${TEENSY_ROOT}/pwm.c
+        ${TEENSY_ROOT}/rtc.c
+        ${TEENSY_ROOT}/usb_mtp.c
+        ${TEENSY_ROOT}/usb.c
+        ${TEENSY_ROOT}/usb_midi.c
+        ${TEENSY_ROOT}/usb_mouse.c 
+        ${TEENSY_ROOT}/usb_desc.c
+        ${TEENSY_ROOT}/usb_keyboard.c
+        ${TEENSY_ROOT}/usb_joystick.c
+        ${TEENSY_ROOT}/usb_touch.c
+        ${TEENSY_ROOT}/usb_rawhid.c
+        ${TEENSY_ROOT}/usb_seremu.c
+        ${TEENSY_ROOT}/usb_serial.c
+        ${TEENSY_ROOT}/usb_serial2.c
+        ${TEENSY_ROOT}/usb_serial3.c
+        ${TEENSY_ROOT}/sm_alloc_valid.c
+        ${TEENSY_ROOT}/sm_calloc.c
+        ${TEENSY_ROOT}/sm_free.c
+        ${TEENSY_ROOT}/sm_hash.c
+        ${TEENSY_ROOT}/sm_malloc.c
+        ${TEENSY_ROOT}/sm_malloc_stats.c
+        ${TEENSY_ROOT}/sm_pool.c
+        ${TEENSY_ROOT}/sm_realloc.c
+        ${TEENSY_ROOT}/sm_realloc_i.c
+        ${TEENSY_ROOT}/sm_realloc_move.c
+        ${TEENSY_ROOT}/sm_szalloc.c
+        ${TEENSY_ROOT}/sm_util.c
+        ${TEENSY_ROOT}/sm_zalloc.c
+        ${TEENSY_ROOT}/clockspeed.c
+        ${TEENSY_ROOT}/fuse.c
+        ${TEENSY_ROOT}/tempmon.c
+        ${TEENSY_ROOT}/keylayouts.c
+        ${TEENSY_ROOT}/nonstd.c
+        ${TEENSY_ROOT}/extmem.c
+        ${TEENSY_ROOT}/eeprom.c
+        ${TEENSY_ROOT}/bootdata.c
+        ${TEENSY_ROOT}/startup.c
+    )
 
-set(TEENSY_CXX_CORE_FILES
-    ${TEENSY_ROOT}/main.cpp
-    ${TEENSY_ROOT}/usb_inst.cpp
-    ${TEENSY_ROOT}/yield.cpp
-    ${TEENSY_ROOT}/HardwareSerial1.cpp 
-    ${TEENSY_ROOT}/HardwareSerial2.cpp
-    ${TEENSY_ROOT}/HardwareSerial3.cpp
-    ${TEENSY_ROOT}/WMath.cpp
-    ${TEENSY_ROOT}/Print.cpp
-    
-    ${TEENSY_ROOT}/new.cpp
-    ${TEENSY_ROOT}/usb_flightsim.cpp
-    ${TEENSY_ROOT}/avr_emulation.cpp
-    ${TEENSY_ROOT}/IPAddress.cpp
-    ${TEENSY_ROOT}/Stream.cpp
-    ${TEENSY_ROOT}/Tone.cpp
-    ${TEENSY_ROOT}/IntervalTimer.cpp
-    ${TEENSY_ROOT}/DMAChannel.cpp
-    ${TEENSY_ROOT}/AudioStream.cpp
-    ${TEENSY_ROOT}/WString.cpp
-)
+    set(TEENSY_CXX_CORE_FILES
+        ${TEENSY_ROOT}/main.cpp
+        ${TEENSY_ROOT}/usb_inst.cpp
+        ${TEENSY_ROOT}/yield.cpp
+        ${TEENSY_ROOT}/HardwareSerial.cpp 
+        ${TEENSY_ROOT}/HardwareSerial1.cpp 
+        ${TEENSY_ROOT}/HardwareSerial2.cpp
+        ${TEENSY_ROOT}/HardwareSerial3.cpp
+        ${TEENSY_ROOT}/HardwareSerial4.cpp
+        ${TEENSY_ROOT}/HardwareSerial5.cpp
+        ${TEENSY_ROOT}/HardwareSerial6.cpp
+        ${TEENSY_ROOT}/HardwareSerial7.cpp
+        ${TEENSY_ROOT}/HardwareSerial8.cpp
+        ${TEENSY_ROOT}/serialEvent.cpp
+        ${TEENSY_ROOT}/serialEvent1.cpp
+        ${TEENSY_ROOT}/serialEvent2.cpp
+        ${TEENSY_ROOT}/serialEvent3.cpp
+        ${TEENSY_ROOT}/serialEvent4.cpp
+        ${TEENSY_ROOT}/serialEvent5.cpp
+        ${TEENSY_ROOT}/serialEvent6.cpp
+        ${TEENSY_ROOT}/serialEvent7.cpp
+        ${TEENSY_ROOT}/serialEvent8.cpp
+        ${TEENSY_ROOT}/serialEventUSB1.cpp
+        ${TEENSY_ROOT}/serialEventUSB2.cpp
+        ${TEENSY_ROOT}/WMath.cpp
+        ${TEENSY_ROOT}/Print.cpp
+
+        ${TEENSY_ROOT}/new.cpp
+        ${TEENSY_ROOT}/usb_audio.cpp
+        ${TEENSY_ROOT}/usb_flightsim.cpp
+        ${TEENSY_ROOT}/IPAddress.cpp
+        ${TEENSY_ROOT}/Stream.cpp
+        ${TEENSY_ROOT}/Time.cpp
+        ${TEENSY_ROOT}/Tone.cpp
+        ${TEENSY_ROOT}/IntervalTimer.cpp
+        ${TEENSY_ROOT}/DMAChannel.cpp
+        ${TEENSY_ROOT}/AudioStream.cpp
+        ${TEENSY_ROOT}/EventResponder.cpp
+        ${TEENSY_ROOT}/CrashReport.cpp
+        ${TEENSY_ROOT}/WString.cpp
+    )
+else()
+    set(TEENSY_C_CORE_FILES
+        ${TEENSY_ROOT}/math_helper.c
+        ${TEENSY_ROOT}/analog.c
+        ${TEENSY_ROOT}/serial1.c
+        ${TEENSY_ROOT}/serial2.c
+        ${TEENSY_ROOT}/serial3.c
+        ${TEENSY_ROOT}/usb_mem.c
+        ${TEENSY_ROOT}/usb_dev.c
+        ${TEENSY_ROOT}/usb_midi.c
+        ${TEENSY_ROOT}/usb_mouse.c 
+        ${TEENSY_ROOT}/usb_desc.c
+        ${TEENSY_ROOT}/usb_keyboard.c
+        ${TEENSY_ROOT}/usb_joystick.c
+        ${TEENSY_ROOT}/usb_rawhid.c
+        ${TEENSY_ROOT}/usb_seremu.c
+        ${TEENSY_ROOT}/usb_serial.c
+        ${TEENSY_ROOT}/mk20dx128.c
+        ${TEENSY_ROOT}/touch.c
+        ${TEENSY_ROOT}/pins_teensy.c
+        ${TEENSY_ROOT}/keylayouts.c
+        ${TEENSY_ROOT}/nonstd.c
+        ${TEENSY_ROOT}/eeprom.c
+    )
+
+    set(TEENSY_CXX_CORE_FILES
+        ${TEENSY_ROOT}/main.cpp
+        ${TEENSY_ROOT}/usb_inst.cpp
+        ${TEENSY_ROOT}/yield.cpp
+        ${TEENSY_ROOT}/HardwareSerial1.cpp 
+        ${TEENSY_ROOT}/HardwareSerial2.cpp
+        ${TEENSY_ROOT}/HardwareSerial3.cpp
+        ${TEENSY_ROOT}/WMath.cpp
+        ${TEENSY_ROOT}/Print.cpp
+        
+        ${TEENSY_ROOT}/new.cpp
+        ${TEENSY_ROOT}/usb_flightsim.cpp
+        ${TEENSY_ROOT}/avr_emulation.cpp
+        ${TEENSY_ROOT}/IPAddress.cpp
+        ${TEENSY_ROOT}/Stream.cpp
+        ${TEENSY_ROOT}/Tone.cpp
+        ${TEENSY_ROOT}/IntervalTimer.cpp
+        ${TEENSY_ROOT}/DMAChannel.cpp
+        ${TEENSY_ROOT}/AudioStream.cpp
+        ${TEENSY_ROOT}/WString.cpp
+    )
+endif()
 
 macro(add_teensy_executable TARGET_NAME SOURCES)
     # Determine the target flags for this executable.
     set(USB_MODE_DEF)
     if(${TEENSY_USB_MODE} STREQUAL SERIAL)
         set(USB_MODE_DEF USB_SERIAL)
+    elseif(${TEENSY_USB_MODE} STREQUAL DUAL_SERIAL)
+        set(USB_MODE_DEF USB_DUAL_SERIAL)
+    elseif(${TEENSY_USB_MODE} STREQUAL TRIPLE_SERIAL)
+        set(USB_MODE_DEF USB_TRIPLE_SERIAL)
+    elseif(${TEENSY_USB_MODE} STREQUAL KEYBOARD)
+        set(USB_MODE_DEF USB_KEYBOARDONLY)
+    elseif(${TEENSY_USB_MODE} STREQUAL TOUCHSCREEN)
+        set(USB_MODE_DEF USB_TOUCHSCREEN)
     elseif(${TEENSY_USB_MODE} STREQUAL HID)
         set(USB_MODE_DEF USB_HID)
     elseif(${TEENSY_USB_MODE} STREQUAL SERIAL_HID)
         set(USB_MODE_DEF USB_SERIAL_HID)
+    elseif(${TEENSY_USB_MODE} STREQUAL HID_TOUCH)
+        set(USB_MODE_DEF USB_HID_TOUCHSCREEN)
     elseif(${TEENSY_USB_MODE} STREQUAL MIDI)
         set(USB_MODE_DEF USB_MIDI)
+    elseif(${TEENSY_USB_MODE} STREQUAL MIDI4)
+        set(USB_MODE_DEF USB_MIDI4)
+    elseif(${TEENSY_USB_MODE} STREQUAL MIDI16)
+        set(USB_MODE_DEF USB_MIDI16)
+    elseif(${TEENSY_USB_MODE} STREQUAL MIDI_SERIAL)
+        set(USB_MODE_DEF USB_MIDI_SERIAL)
+    elseif(${TEENSY_USB_MODE} STREQUAL MIDI4_SERIAL)
+        set(USB_MODE_DEF USB_MIDI4_SERIAL)
+    elseif(${TEENSY_USB_MODE} STREQUAL MIDI16_SERIAL)
+        set(USB_MODE_DEF USB_MIDI16_SERIAL)
+    elseif(${TEENSY_USB_MODE} STREQUAL AUDIO)
+        set(USB_MODE_DEF USB_AUDIO)
+    elseif(${TEENSY_USB_MODE} STREQUAL MIDI_AUDIO_SERIAL)
+        set(USB_MODE_DEF USB_MIDI_AUDIO_SERIAL)
+    elseif(${TEENSY_USB_MODE} STREQUAL MIDI16_AUDIO_SERIAL)
+        set(USB_MODE_DEF USB_MIDI16_AUDIO_SERIAL)
+    elseif(${TEENSY_USB_MODE} STREQUAL MTPDISK)
+        set(USB_MODE_DEF USB_MTPDISK)
+    elseif(${TEENSY_USB_MODE} STREQUAL MTPDISK_SERIAL)
+        set(USB_MODE_DEF USB_MTPDISK_SERIAL)
     elseif(${TEENSY_USB_MODE} STREQUAL RAWHID)
         set(USB_MODE_DEF USB_RAWHID)
     elseif(${TEENSY_USB_MODE} STREQUAL FLIGHTSIM)
         set(USB_MODE_DEF USB_FLIGHTSIM)
+    elseif(${TEENSY_USB_MODE} STREQUAL FLIGHTSIM_JOYSTICK)
+        set(USB_MODE_DEF USB_FLIGHTSIM_JOYSTICK)
     else()
         message(FATAL_ERROR "Invalid USB mode: ${TEENSY_USB_MODE}")
     endif()
