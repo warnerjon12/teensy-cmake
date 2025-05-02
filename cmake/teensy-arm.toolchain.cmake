@@ -106,8 +106,10 @@ if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
 
     if(TEENSY_BOARD STREQUAL "teensy41")
         set(TEENSY_LD "imxrt1062_t41.ld")
+        add_definitions(-DARDUINO_TEENSY41)
     else()
         set(TEENSY_LD "imxrt1062.ld")
+        add_definitions(-DARDUINO_TEENSY40)
     endif()
 
     set(LINKER_LIBS "-larm_cortexM7lfsp_math -lm -lstdc++" )
