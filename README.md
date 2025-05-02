@@ -4,13 +4,15 @@ teensy-cmake is a template for Teensy projects that uses CMake to build your ske
 This lets you develop for Teensy using your favorite text editor and terminal.
 It can easily accommodate executables built from several source and header files.
 
-Teensy sketches from Teensyduino have been included to get started quickly.
+This branch includes the needed VS Code configuration files to develop and build with Ninja. It is organized more as an independent project, rather than for use with multiple isolated sketches.
 
-It has currently only been tested on Linux with a Teensy 3.1.
+It has currently only been tested on Linux with Teensy 3.1 and 4.x.
 
 # Requirements
 
+* VS Code
 * CMake
+* Ninja
 * Git
 * A cross-compiler toolchain for ARM ('arm-none-eabi')
 * Teensyduino for sketches that use libraries (e.g. Bounce)
@@ -20,26 +22,16 @@ It has currently only been tested on Linux with a Teensy 3.1.
 Clone this repository from GitHub:
 
 ```bash
-git clone https://github.com/xya/teensy-cmake.git
+git clone --recurse-submodules https://github.com/warnerjon12/teensy-cmake.git
 cd teensy-cmake
+git checkout vscode
 ```
 
-If you don't have Teensystudio installed, clone the Teensy 'cores' repository from GitHub:
+This branch includes the Teensy 'cores' repository as a submodule, so no additional setup is required. Running 'Compile Project' in VS Code should do everything that is needed, but a terminal build can also be done:
 
 ```bash
-git clone https://github.com/PaulStoffregen/cores.git
-```
-
-Create a build directory:
-
-```bash
-mkdir build
-cd build
-```
-
-Run CMake:
-```bash
-cmake ..
+cmake -G Ninja -B build
+ninja -C build
 ```
 
 This last step might fail with errors such as 'compiler not found'. In this case, run the CMake GUI:
@@ -48,26 +40,19 @@ This last step might fail with errors such as 'compiler not found'. In this case
 cmake-gui ..
 ```
 
-Make sure that 'TEENSY_CORES_ROOT' points to the 'cores' directory from Arduino (e.g. /usr/share/arduino/hardware/teensy/cores), or to the directory where you cloned the 'cores' directory.
+To compile for different boards, set 'TEENSY_BOARD' (e.g. `cmake -D TEENSY_BOARD=teensy40 ...`). For VS Code, this is set in `cmake-kits.json`.
+
+'TEENSY_CORES_ROOT' points to the 'cores' directory cloned as a submodule, but this can be overridden if using a submodule is not desired or a different cores library is preferred.
 
 To build sketches that use libraries, make sure that 'ARDUINO_LIB_ROOT' points to the Arduino library directory (e.g. /usr/share/arduino/libraries).
 
-Finally, build all example sketches with:
-```bash
-make -j
-```
-
 # Flashing sketches to the Teensy
 
-TODO: This is not yet supported.
+It is easiest to use `teensy_loader_cli` for this. Flash and reboot tasks are included for use with VS Code.
 
-# Creating new single-file sketches
+# Creating your project
 
-To create new sketches, simply create a new directory inside 'sketches' (e.g. sketches/MySketch) that contains the sketch file (e.g. sketches/MySketch/MySketch.ino). It will be automatically be picked up the next time you run CMake. The sketch can be a C++ file too, in which case you need to import 'Arduino.h' and declare the 'setup'/'loop' functions.
-
-# Creating new multi-file C/C++ projects
-
-You can create new multi-file projects in the same way than single-file sketches. The only difference is you need to create a 'CMakeLists.txt' file inside the project folder with contents like:
+Place source files in the `src` folder and define target executables in `src/CMakeLists.txt`:
 
 ```
 add_teensy_executable(MyProject
@@ -76,14 +61,14 @@ add_teensy_executable(MyProject
     MyProject_interrupts.cpp)
 ```
 
-# Custom configuration
+## Custom configuration
 
-For some sketches, the Teensy needs to run in a different 'USB mode'. You can set this in the sketch's CMakeLists.txt file:
+For some sketches, the Teensy needs to run in a different 'USB mode'. You can set this in the CMakeLists.txt file as well:
 
 ```
 set(TEENSY_USB_MODE MIDI)
 
-add_sketch() # or add_teensy_executable(...)
+add_teensy_executable(...)
 ```
 
 You can set the 'default' mode in the CMake GUI ('TEENSY_USB_MODE' variable).
@@ -95,14 +80,11 @@ Here is a simple example of how to import a library:
 ```
 import_arduino_library(Bounce)
 
-add_sketch() # or add_teensy_executable(...)
+add_teensy_executable(...)
 ```
 
 Make sure that the 'ARDUINO_LIB_ROOT' variable is set up correctly in CMake.
 
-# Creating bare C/C++ projects
+## External libraries
 
-With 'bare' projects you have to define 'main' and include headers yourself.
-
-TODO: This is not yet supported.
-
+This template can be adjusted to include other libraries, but an example is not currently included.
