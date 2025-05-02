@@ -6,7 +6,7 @@ It can easily accommodate executables built from several source and header files
 
 Teensy sketches from Teensyduino have been included to get started quickly.
 
-It has currently only been tested on Linux with a Teensy 3.1.
+It has currently only been tested on Linux with Teensy 3.1 and 4.x.
 
 # Requirements
 
@@ -20,7 +20,7 @@ It has currently only been tested on Linux with a Teensy 3.1.
 Clone this repository from GitHub:
 
 ```bash
-git clone https://github.com/xya/teensy-cmake.git
+git clone https://github.com/warnerjon12/teensy-cmake.git
 cd teensy-cmake
 ```
 
@@ -48,6 +48,8 @@ This last step might fail with errors such as 'compiler not found'. In this case
 cmake-gui ..
 ```
 
+To compile for different boards, set 'TEENSY_BOARD' (e.g. `cmake -D TEENSY_BOARD=teensy40 ...`).
+
 Make sure that 'TEENSY_CORES_ROOT' points to the 'cores' directory from Arduino (e.g. /usr/share/arduino/hardware/teensy/cores), or to the directory where you cloned the 'cores' directory.
 
 To build sketches that use libraries, make sure that 'ARDUINO_LIB_ROOT' points to the Arduino library directory (e.g. /usr/share/arduino/libraries).
@@ -59,7 +61,7 @@ make -j
 
 # Flashing sketches to the Teensy
 
-TODO: This is not yet supported.
+It is easiest to use `teensy_loader_cli` for this. Flash and reboot tasks are included for use with VS Code in the [vscode branch](https://github.com/warnerjon12/teensy-cmake/tree/vscode).
 
 # Creating new single-file sketches
 
@@ -102,7 +104,4 @@ Make sure that the 'ARDUINO_LIB_ROOT' variable is set up correctly in CMake.
 
 # Creating bare C/C++ projects
 
-With 'bare' projects you have to define 'main' and include headers yourself.
-
-TODO: This is not yet supported.
-
+With 'bare' projects you have to define 'main' and include headers yourself. Creating targets with `add_teensy_executable` should still work in such cases. The [vscode branch](https://github.com/warnerjon12/teensy-cmake/tree/vscode) has a setup for creating bare projects with VS Code that build with Ninja.
