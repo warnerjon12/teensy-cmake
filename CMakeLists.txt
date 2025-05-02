@@ -36,4 +36,5 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 include(Teensy)
 
-subdirs(sketches)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
+add_subdirectory(src)

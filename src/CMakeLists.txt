@@ -1,0 +1,1 @@
+add_teensy_executable("hello_world" main.cpp)
