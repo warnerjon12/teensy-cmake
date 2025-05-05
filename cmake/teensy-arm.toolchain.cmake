@@ -31,7 +31,7 @@ if(NOT DEFINED TEENSY_BOARD)
     set(TEENSY_BOARD "teensy31")
 endif()
 if(NOT DEFINED TEENSY_CORES_ROOT)
-    set(TEENSY_CORES_ROOT "/usr/share/arduino/hardware/teensy/cores" CACHE PATH "Path to the Teensy 'cores' repository")
+    set(TEENSY_CORES_ROOT "${CMAKE_SOURCE_DIR}/lib/teensy/cores" CACHE PATH "Path to the Teensy 'cores' repository")
 endif()
 
 if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
