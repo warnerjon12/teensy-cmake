@@ -44,10 +44,10 @@ if(NOT DEFINED ARDUINO_LIB_ROOT)
     set(ARDUINO_LIB_ROOT "/usr/share/arduino/libraries" CACHE PATH "Path to the Arduino library directory")
 endif()
 if(NOT DEFINED ARDUINO_VERSION)
-    set(ARDUINO_VERSION "106" CACHE STRING "Version of the Arduino SDK")
+    set(ARDUINO_VERSION "10813" CACHE STRING "Version of the Arduino SDK")
 endif()
 if(NOT DEFINED TEENSYDUINO_VERSION)
-    set(TEENSYDUINO_VERSION "120" CACHE STRING "Version of the Teensyduino SDK")
+    set(TEENSYDUINO_VERSION "159" CACHE STRING "Version of the Teensyduino SDK")
 endif()
 
 if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
@@ -104,7 +104,7 @@ if(TEENSY_BOARD STREQUAL "teensy40" OR TEENSY_BOARD STREQUAL "teensy41")
     set(TARGET_FLAGS "-mthumb -mcpu=cortex-m7 -mfloat-abi=hard -mfpu=fpv5-d16")
     set(BASE_FLAGS "-g -Wall -ffunction-sections -fdata-sections -nostdlib ${TARGET_FLAGS}")
 
-    set(CMAKE_CXX_FLAGS "${BASE_FLAGS} -fno-exceptions -fpermissive -fno-rtti -fno-threadsafe-statics -felide-constructors -std=gnu++0x -Wno-error=narrowing" CACHE STRING "c++ flags")
+    set(CMAKE_CXX_FLAGS "${BASE_FLAGS} -fno-exceptions -fpermissive -fno-rtti -fno-threadsafe-statics -felide-constructors -std=gnu++17 -Wno-error=narrowing" CACHE STRING "c++ flags")
 
     if(TEENSY_BOARD STREQUAL "teensy41")
         set(TEENSY_LD "imxrt1062_t41.ld")
@@ -130,7 +130,7 @@ else()
 endif()
 
 set(CMAKE_C_FLAGS "${BASE_FLAGS} -DTIME_T=1421620748" CACHE STRING "c flags") # XXX Generate TIME_T dynamically.
-set(LINKER_FLAGS "-Os -Wl,--gc-sections,--relax ${TARGET_FLAGS} -T${TEENSY_ROOT}/${TEENSY_LD}" )
+set(LINKER_FLAGS "-Os -Wl,--gc-sections,--relax ${TARGET_FLAGS} -T\"${TEENSY_ROOT}/${TEENSY_LD}\"" )
 
 set(CMAKE_SHARED_LINKER_FLAGS "${LINKER_FLAGS}" CACHE STRING "linker flags" FORCE)
 set(CMAKE_MODULE_LINKER_FLAGS "${LINKER_FLAGS}" CACHE STRING "linker flags" FORCE)
