@@ -157,7 +157,9 @@ else()
     )
 endif()
 
-macro(add_teensy_executable TARGET_NAME SOURCES)
+macro(add_teensy_executable TARGET_NAME)
+    set(SOURCES ${ARGN})
+
     # Determine the target flags for this executable.
     set(USB_MODE_DEF)
     if(${TEENSY_USB_MODE} STREQUAL SERIAL)
